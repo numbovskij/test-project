@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,7 @@ Route::get('/', function () {
 
 Route::name('user.')->group(function () {
     Route::view('/ticket', 'ticket')->middleware('auth')->name('ticket');
+    Route::post('/ticket-create', [TicketController::class, 'create'])->name('ticket-create');
 
     Route::get('/login', function () {
         if (Auth::check()) {

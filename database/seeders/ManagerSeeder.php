@@ -21,7 +21,7 @@ class ManagerSeeder extends Seeder
             [
                 'email'      => 'manager@gmail.com',
                 'name'       => 'manager',
-                'password'   => Hash::make('123123123'),
+                'password'   => Hash::make('secret'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
                 'role'       => User::ROLE_MANAGER

@@ -24,34 +24,43 @@
 </head>
 <body class="antialiased">
     <div class="container">
-        <h1>Заявка</h1>
-{{--        <form class="col-3" method="POST" action="{{ route('user.registration') }}">--}}
-{{--            @csrf--}}
-{{--            <div class="form-group">--}}
-{{--                <label for="name" class="col-form-label-lg">Ваше имя</label>--}}
-{{--                <input class="form-control" placeholder="Вася" value="" id="name" name="name" type="text">--}}
-{{--                @error('name')--}}
-{{--                <div class="alert alert-danger">{{ $message }}</div>--}}
-{{--                @enderror--}}
-{{--            </div>--}}
-{{--            <div class="form-group">--}}
-{{--                <label for="email" class="col-form-label-lg">Ваш email</label>--}}
-{{--                <input class="form-control" placeholder="E-mail" value="" id="email" name="email" type="text">--}}
-{{--                @error('email')--}}
-{{--                    <div class="alert alert-danger">{{ $message }}</div>--}}
-{{--                @enderror--}}
-{{--            </div>--}}
-{{--            <div class="form-group">--}}
-{{--                <label for="password" class="col-form-label-lg">Ваш пароль</label>--}}
-{{--                <input class="form-control" placeholder="password" value="" id="password" name="password" type="password">--}}
-{{--                @error('password')--}}
-{{--                <div class="alert alert-danger">{{ $message }}</div>--}}
-{{--                @enderror--}}
-{{--            </div>--}}
-{{--            <div class="form-group">--}}
-{{--                <button class="btn btn-lg btn-primary" type="submit" name="sendMe" value="1">Регистрация</button>--}}
-{{--            </div>--}}
-{{--        </form>--}}
+        @if (Auth::user()->role == 0)
+            <h1>Список заявок</h1>
+        @endif
+
+        @if (Auth::user()->role == 1)
+            <h1>Создание заявки</h1>
+
+            <form class="col-3" method="POST" action="{{ route('user.ticket-create') }}">
+                @csrf
+                <div class="form-group">
+                    <label for="title" class="col-form-label-lg">Тема</label>
+                    <input class="form-control" placeholder="Тема" value="" id="title" name="title" type="text">
+                    @error('title')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label for="description">Описание</label>
+                    <textarea name="description" class="form-control" id="description" rows="3"></textarea>
+                    @error('description')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <div class="form-group">
+                        <label for="file">Выберите файл</label>
+                        <input type="file" class="form-control-file" id="file">
+                    </div>
+                    @error('file')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-lg btn-primary" type="submit" name="send" value="1">Отправить</button>
+                </div>
+            </form>
+        @endif
     </div>
 </body>
 </html>

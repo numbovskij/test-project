@@ -27,6 +27,7 @@ class LoginController extends Controller
         if (Auth::attempt($fields)) {
             return redirect(route('user.ticket'));
         }
+
         return redirect(route('user.login'))->withErrors([
             'formError' => 'Не удалось авторизоваться'
         ]);
