@@ -14,6 +14,29 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
+     * id роли менеджер
+     */
+    const ROLE_MANAGER = 0;
+
+    /**
+     * id роли клиент
+     */
+    const ROLE_CLIENT = 1;
+
+    /**
+     * Метод возвращает маппинг ролей
+     *
+     * @return string[]
+     */
+    public static function getRoles(): array
+    {
+        return [
+            self::ROLE_MANAGER => 'Менеджер',
+            self::ROLE_CLIENT  => 'Клиент',
+        ];
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
