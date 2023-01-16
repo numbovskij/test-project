@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RegisterController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +18,34 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::name('user.')->group(function () {
+    Route::view('/ticket', 'ticket')->middleware('auth')->name('ticket');
+
+    Route::get('/login', function () {
+        if (Auth::check()) {
+            return redirect(route('user.create.ticket'));
+        }
+
+        return view('login');
+    })->name('login');
+
+    Route::post('/login', [LoginController::class, 'login']);
+
+    Route::get('/logout', function () {
+        Auth::logout();
+
+        redirect('/');
+    });
+
+    Route::get('/registration', function () {
+        if (Auth::check()) {
+            return redirect(route('user.ticket'));
+        }
+
+        return view('registration');
+    })->name('registration');
+
+    Route::post('/registration', [RegisterController::class, 'save']);
 });
