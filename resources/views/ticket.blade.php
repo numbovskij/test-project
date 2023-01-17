@@ -26,38 +26,57 @@
     <div class="container">
         @if (Auth::user()->role == 0)
             <h1>Список заявок</h1>
+            <div class="row">
+                @foreach($tickets as $ticket)
+                    <div class="col-sm-6 mb-3 mb-sm-0 mb-15">
+                        <div class="card">
+                            <div class="card-body">
+                                <p><b>id:</b> {{$ticket->id}}</p>
+                                <h2 class="card-title"><b>Тема:</b> {{$ticket->title}}</h2>
+                                <p class="card-text"><b>Сообщение:</b> {{$ticket->description}}</p>
+                                <p class="card-text"><b>Время создания:</b> {{$ticket->created_at}}</p>
+                                <hr>
+                                <p class="card-text"><b>Имя клиента:</b> {{$ticket->user->name}}</p>
+                                <p class="card-text"><b>Почта клиента:</b> {{$ticket->user->email}}</p>
+                                @if($ticket->image_url !== null)
+                                <img src="{{'storage/' . $ticket->image_url}}" class="img-thumbnail">
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
         @endif
 
         @if (Auth::user()->role == 1)
             <h1>Создание заявки</h1>
-
-            <form class="col-3" method="POST" action="{{ route('user.ticket-create') }}">
+            <form class="col-3" method="POST" action="{{ route('user.ticket-create') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
                     <label for="title" class="col-form-label-lg">Тема</label>
-                    <input class="form-control" placeholder="Тема" value="" id="title" name="title" type="text">
+                    <input @if(!Auth::user()->isSendingPossible()) disabled @endif class="form-control" placeholder="Тема" value="" id="title" name="title" type="text">
                     @error('title')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group">
                     <label for="description">Описание</label>
-                    <textarea name="description" class="form-control" id="description" rows="3"></textarea>
+                    <textarea @if(!Auth::user()->isSendingPossible()) disabled @endif name="description" class="form-control" id="description" rows="3"></textarea>
                     @error('description')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group">
                     <div class="form-group">
-                        <label for="file">Выберите файл</label>
-                        <input type="file" class="form-control-file" id="file">
+                        <label for="image">Выберите файл</label>
+                        <input @if(!Auth::user()->isSendingPossible()) disabled @endif type="file" class="form-control-file" id="image" name="image">
                     </div>
                     @error('file')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-lg btn-primary" type="submit" name="send" value="1">Отправить</button>
+                    <button @if(!Auth::user()->isSendingPossible()) disabled @endif class="btn btn-lg btn-primary" type="submit" name="send" value="1">Отправить</button>
                 </div>
             </form>
         @endif

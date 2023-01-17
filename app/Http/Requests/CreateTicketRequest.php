@@ -26,6 +26,7 @@ class CreateTicketRequest extends FormRequest
         return [
             "title"       => "required|string|max:255",
             "description" => "required|string",
+            "image"       => "image:jpg",
         ];
     }
 }

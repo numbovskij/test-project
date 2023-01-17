@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use App\Http\Requests\CreateTicketRequest;
 use App\Models\Ticket;
+use App\Models\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -22,11 +24,21 @@ class TicketRepository
         DB::beginTransaction();
 
         try {
+            if ($input->hasFile('image')) {
+                $image = $input->file('image');
+                $path = $image->store('images');
+            }
+
             $ticket = Ticket::create([
                 'title'       => $input->title,
                 'description' => $input->description,
-                'user_id'     => Auth::id()
+                'user_id'     => Auth::id(),
+                'image_url'   => $path ?? null
             ]);
+
+            $currentUser = User::where('id', Auth::id())->first();
+            $currentUser->last_ticket = Carbon::now();
+            $currentUser->save();
 
             DB::commit();
 

@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -24,17 +24,9 @@ class User extends Authenticatable
     const ROLE_CLIENT = 1;
 
     /**
-     * Метод возвращает маппинг ролей
-     *
-     * @return string[]
+     * лимит времени в часах
      */
-    public static function getRoles(): array
-    {
-        return [
-            self::ROLE_MANAGER => 'Менеджер',
-            self::ROLE_CLIENT  => 'Клиент',
-        ];
-    }
+    const LIMIT = 24;
 
     /**
      * The attributes that are mass assignable.
@@ -45,6 +37,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'last_ticket',
     ];
 
     /**
@@ -76,4 +69,31 @@ class User extends Authenticatable
     {
         $this->attributes['password'] = Hash::make($password);
     }
+
+    /**
+     * геттер возвращает время создания последнего тикета
+     *
+     * @return string|null
+     */
+    public function getLastTicket(): ?string
+    {
+        return $this->last_ticket;
+    }
+
+    /**
+     * проверка можно ли создать тикет
+     *
+     * @return bool
+     */
+    public function isSendingPossible(): bool
+    {
+        if(!$this->getLastTicket()) {
+            return true;
+        }
+
+        $hours = Carbon::now()->diffInHours($this->getLastTicket());
+
+        return $hours >= self::LIMIT;
+    }
+
 }

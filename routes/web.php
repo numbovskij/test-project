@@ -22,7 +22,8 @@ Route::get('/', function () {
 });
 
 Route::name('user.')->group(function () {
-    Route::view('/ticket', 'ticket')->middleware('auth')->name('ticket');
+    Route::get('/ticket', [TicketController::class, 'index'])->middleware('auth')->name('ticket');
+
     Route::post('/ticket-create', [TicketController::class, 'create'])->name('ticket-create');
 
     Route::get('/login', function () {

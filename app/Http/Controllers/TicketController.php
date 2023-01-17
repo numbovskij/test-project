@@ -6,16 +6,23 @@ use App\Http\Requests\CreateTicketRequest;
 use App\Jobs\QueueSenderEmail;
 use App\Models\Ticket;
 use App\Repositories\TicketRepository;
+use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 
 class TicketController extends Controller
 {
-    public function index() {
+    /**
+     * возвращает список тикетов
+     *
+     * @return View
+     */
+    public function index(): View
+    {
         $tickets = Ticket::all();
 
-        return view("ticket", [ "tickets" => $tickets ]);
+        return view("ticket", compact('tickets'));
     }
 
     /**
