@@ -6,7 +6,6 @@ use App\Models\User;
 
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class ManagerSeeder extends Seeder
 {
@@ -21,7 +20,7 @@ class ManagerSeeder extends Seeder
             [
                 'email'      => 'manager@gmail.com',
                 'name'       => 'manager',
-                'password'   => Hash::make('secret'),
+                'password'   => 'secret',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
                 'role'       => User::ROLE_MANAGER
